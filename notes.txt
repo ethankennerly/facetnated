@@ -1,0 +1,45 @@
+Dimensions
+http://www.mindjolt.com/dimensions.html
+
+10 for Color or 20 for Shape
+
+5 shapes (circle, triangle, square, diamond, pentagon)
+5 colors (yellow, red, green, blue, magenta)
+
+higher score for combos.
+
+Facets
+Facetnating
+Facetnation
+Color then Shape.
+Clear board.  Time bonus.
+Number of points at each tile for length of tiles.
+7x5 grid
+Blocks collapse down and to the left.
+score for combos:
+exponent of 2 * 10:
+10, 20, 40,  80, 160, 320, 640, 1280, 2560, 5120, ...
+or power of 2 * 10:
+10, 40, 90, 160, 250, 360, 490, 640,   810, 1000, ...
+Match shape instead of color, increase index into combos score by 2.
+2 minute time limit to clear all gems.
+time bonus for each second remaining.
+if clear all gems in time, level up.
+maybe multiple rounds of 7x5 grids as to see all blocks at beginning.
+level difficulty:
+	colors	shapes	columns	rows
+	2	1	3	2
+	1	2	3	2
+	2	2	3	2
+	2	2	5	3
+	3	3	5	3
+	3	3	6	4
+	...	...	...	...
+	5	5	7	5
+HUD
+	time
+	score
+matching shapes not required, except maybe to clear the board and maximize score.  match shape or color at any time.
+time bonus does not end game.
+having no moves left ends game.
+like dimensions, hear sound when click to extend.  otherwise hear lower sound when contracting
