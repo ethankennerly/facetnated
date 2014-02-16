@@ -1,3 +1,10 @@
+TODO
+	See a 7x5 grid of shuffled 5 shapes and 5 colors.
+	drag to match 3 of same color
+	drag to match 3 of same shape
+	levels
+	time limit
+
 Dimensions
 http://www.mindjolt.com/dimensions.html
 

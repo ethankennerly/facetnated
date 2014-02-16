@@ -28,14 +28,12 @@ package com.finegamedesign.facetnated
         private static var dieClass:Class;
         private var die:Sound = new dieClass();
 
-        public var detonator:MovieClip;
         public var feedback:MovieClip;
         public var highScore_txt:TextField;
         public var level_txt:TextField;
         public var kill_txt:TextField;
         public var maxLevel_txt:TextField;
         public var maxKill_txt:TextField;
-        public var mobs:MovieClip;
         public var room:MovieClip;
         public var score_txt:TextField;
 
@@ -67,7 +65,7 @@ package com.finegamedesign.facetnated
             score = 0;
             highScore = 0;
             level = 1;
-            maxLevel = Model.levelDiagrams.length;
+            maxLevel = Model.levels.length;
             previousTime = getTimer();
             elapsed = 0;
             mouseJustPressed = false;
@@ -87,7 +85,7 @@ package com.finegamedesign.facetnated
         {
             mouseJustPressed = !isMouseDown;
             if (mouseJustPressed) {
-                model.detonate();
+                trace("Main.mouseDown: mouseJustPressed: TODO");
             }
             isMouseDown = true;
         }
@@ -96,11 +94,6 @@ package com.finegamedesign.facetnated
         {
             mouseJustPressed = false;
             isMouseDown = false;
-        }
-
-        private function alternateSpeed(event:MouseEvent):void
-        {
-            Model.alternateSpeed();
         }
 
         private function cheatLevel(event:MouseEvent):void
@@ -117,8 +110,8 @@ package com.finegamedesign.facetnated
             mouseChildren = true;
             model.kill = 0;
             model.maxKill = 0;
-            model.populate(Model.levelDiagrams[level - 1]);
-            view.populate(model, mobs, room, detonator);
+            model.populate(Model.levels[level - 1]);
+            view.populate(model, room);
         }
 
         private function updateHudText():void
@@ -145,12 +138,12 @@ package com.finegamedesign.facetnated
                 FlxKongregate.init(FlxKongregate.connect);
             }
             if (inTrial) {
-                var win:int = model.update(elapsed);
-                view.update(model);
+                var win:int = model.update();
+                //+ view.update(model);
                 result(win);
             }
             else {
-                view.update(model);
+                //+ view.update(model);
                 if ("next" == feedback.currentLabel) {
                     next();
                 }
@@ -176,7 +169,7 @@ package com.finegamedesign.facetnated
             inTrial = false;
             scoreUp();
             level++;
-            if (Model.levelDiagrams.length < level) {
+            if (Model.levels.length < level) {
                 level = 0;
                 feedback.gotoAndPlay("complete");
                 complete.play();
@@ -229,7 +222,6 @@ package com.finegamedesign.facetnated
             trial(level);
             mouseChildren = true;
             gotoAndPlay(1);
-            Model.speed = Model.originalSpeed;
         }
     }
 }
