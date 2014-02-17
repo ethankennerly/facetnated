@@ -39,6 +39,7 @@ package com.finegamedesign.facetnated
 
         /**
          * Position each object in the model's grid into the center-aligned room and scale to fit in room.
+         * Adds property "model" to each cell in table.
          */
         internal function populate(model:Model, room:DisplayObjectContainer):void
         {
@@ -61,8 +62,8 @@ package com.finegamedesign.facetnated
             room.height = model.rowCount * tileWidth;
             table = [];
             for (var i:int = 0; i < model.table.length; i++){
-                var s:int = model.getShape(i);
-                var c:int = model.getColor(i);
+                var s:int = model.table[i].shape;
+                var c:int = model.table[i].color;
                 var shapeClass:Class = shapeClasses[s];
                 var cell:MovieClip = new shapeClass();
                 cell.filters = filters[c];
@@ -71,6 +72,7 @@ package com.finegamedesign.facetnated
                 position(cell, i, model.columnCount, model.rowCount);
                 cell.addEventListener(MouseEvent.MOUSE_DOWN, selectDown, false, 0, true);
                 cell.addEventListener(MouseEvent.ROLL_OVER, select, false, 0, true);
+                cell.model = model.table[i];
                 room.addChild(cell);
                 table.push(cell);
             }

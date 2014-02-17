@@ -36,24 +36,18 @@ package com.finegamedesign.facetnated
             for (var c:int = 0; c < cellCount; c++) {
                 var color:int = c % colorCount;
                 var shape:int = int(c / colorCount) % shapeCount;
-                var cell:int = 10 * shape + color;
+                var cell:Cell = new Cell();
+                cell.color = color;
+                cell.shape = shape;
                 table.push(cell);
             }
             shuffle(table);
+            for (var c:int = 0; c < cellCount; c++) {
+                table[c].index = c;
+            }
             selected = [];
             kill = 0;
             maxKill = columnCount * rowCount;
-            trace("Model.populate: " + table.toString());
-        }
-
-        internal function getColor(c:int):int
-        {
-            return table[c] % 10;
-        }
-
-        internal function getShape(c:int):int
-        {
-            return table[c] / 10;
         }
 
         private function shuffle(array:Array):void
@@ -93,17 +87,17 @@ package com.finegamedesign.facetnated
                 }
                 else if (adjacent(tail, i)) {
                     if (selectColor) {
-                        if (getColor(tail) == getColor(i)) {
+                        if (table[tail].color == table[i].color) {
                             push = true;
-                            if (getShape(tail) != getShape(i)) {
+                            if (table[tail].shape != table[i].shape) {
                                 selectShape = false;
                             }
                         }
                     }
                     if (selectShape) {
-                        if (getShape(tail) == getShape(i)) {
+                        if (table[tail].shape == table[i].shape) {
                             push = true;
-                            if (getColor(tail) != getColor(i)) {
+                            if (table[tail].color != table[i].color) {
                                 selectColor = false;
                             }
                         }

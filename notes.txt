@@ -67,3 +67,24 @@ Just mouse down.  Select that cell's address.  Selected is translucent.
 Just mouse over and down adjacent to last selected address.  If matches properties of selection, then select that address.
 Just mouse over and down not adjacent.  Do nothing.
 Mouse up.  Judge selection of cell addresses.  Clear selection.  Delete the cells.
+
+
+Sun 02/16/2014 
+17:35
+
+select
+deselect
+remove
+move
+
+bind cell view to model:
+	cell instance addresses
+		each model cell has an address.  the model may move to other cells.
+		view maps to a model cell.
+	serials
+		starts same as index in table.
+		moves.  when cell moves in table, also move serial.  
+		when remove cell from table, also remove serial.
+
+
+
