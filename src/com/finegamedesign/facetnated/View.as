@@ -126,6 +126,7 @@ package com.finegamedesign.facetnated
             select(e);
         }
 
+        /*-
         private function indexAt(model:Model, mc:MovieClip):int
         {
             var column:int = columnAt(
@@ -136,6 +137,7 @@ package com.finegamedesign.facetnated
                 model.rowCount);
             return model.indexAt(column, row);
         }
+        -*/
 
         private function select(e:MouseEvent):void
         {
@@ -143,30 +145,54 @@ package com.finegamedesign.facetnated
                 return;
             }
             var mc:MovieClip = MovieClip(e.currentTarget);
-            var index:int = indexAt(model, mc);
+            var index:int = mc.model.index;  // indexAt(model, mc);
             trace("View.select: index " + index);
             var selected:Boolean = model.select(index);
-            updateSelected(model, table);
+            updateCells(model, table);
         }
 
-        private function updateSelected(model:Model, table:Array):void
+        internal function update():void
         {
-            for each(var mc:MovieClip in table) {
-                var index:int = indexAt(model, mc);
+            updateCells(model, table);
+        }
+
+        private function updateCells(model:Model, table:Array):void
+        {
+            for (var t:int = 0; t < table.length; t++) {
+                var mc:MovieClip = table[t];
+                var index:int;
+                if (mc.model == null) {
+                    index = Model.EMPTY;
+                }
+                else {
+                    index = mc.model.index;  // indexAt(model, mc);
+                }
                 if (0 <= model.selected.indexOf(index)) {
                     mc.alpha = 0.25;
                 }
                 else {
                     mc.alpha = 1.0;
                 }
+                if (index <= Model.EMPTY) {
+                    room.removeChild(mc);
+                    table.splice(t, 1);
+                }
+                else {
+                    position(mc, index, model.columnCount, 
+                        model.rowCount);
+                }
             }
         }
 
+        /**
+         * Remove cells corresponding to model's addresses.
+         */
         private function judge(e:MouseEvent):void
         {
             mouseUp(e);
-            remove(model.judge(), model.columnCount, model.rowCount);
-            updateSelected(model, table);
+            //- remove(model.judge(), model.columnCount, model.rowCount);
+            model.judge();
+            updateCells(model, table);
         }
 
         /**
@@ -174,6 +200,7 @@ package com.finegamedesign.facetnated
          */
         private function remove(addresses:Array, columnCount:int, rowCount:int):void
         {
+            /*-
             for each(var address:int in addresses) {
                 var x:Number = positionX(address, columnCount);
                 var y:Number = positionY(address, columnCount, rowCount);
@@ -185,6 +212,7 @@ package com.finegamedesign.facetnated
                     }
                 }
             }
+            -*/
         }
 
         private function near(x0:Number, x1:Number):Boolean

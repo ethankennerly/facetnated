@@ -42,7 +42,7 @@ package com.finegamedesign.facetnated
                 table.push(cell);
             }
             shuffle(table);
-            for (var c:int = 0; c < cellCount; c++) {
+            for (c = 0; c < cellCount; c++) {
                 table[c].index = c;
             }
             selected = [];
@@ -134,6 +134,7 @@ package com.finegamedesign.facetnated
 
         /**
          * Removed addresses if 3 or more.
+         * Set index to EMPTY and cell to null, in case view still refers to cell.
          */
         internal function judge():Array
         {
@@ -143,11 +144,56 @@ package com.finegamedesign.facetnated
                 removed = selected.slice();
                 trace("Model.judge: removed " + removed);
                 for each(var address:int in removed) {
-                    table[address] = EMPTY;
+                    table[address].index = EMPTY;
+                    table[address] = null;
                 }
+                collapse(table);
             }
             selected = [];
             return removed;
+        }
+    
+        /**
+         * Swap some cells and their indexes in table.
+         * Slide gems above empty cells down.
+	     * TODO: Slide columns right of empty columns left.
+         */
+        private function collapse(table:Array):void
+        {
+            collapseDown(table);
+        }
+
+        private function collapseDown(table:Array):void
+        {
+            trace("Model.collapseDown: before" + diagram(table));
+            for (var i:int = cellCount - 1; columnCount <= i; i--) {
+                if (null == table[i]) {
+                    var above:int = i - columnCount;
+                    if (null != table[above]) {
+                        for (var j:int = i; j < cellCount && table[j] == null; 
+                                j += columnCount) {
+                        }
+                        j -= columnCount;
+                        table[j] = table[above];
+                        table[j].index = j;
+                        table[above] = null;
+                    }
+                }
+            }
+            trace("Model.collapseDown: after" + diagram(table));
+        }
+
+        internal function diagram(table:Array):String
+        {
+            var diagram:String = "cell count " + table.length;
+            for (var i:int = 0; i < table.length; i++) {
+                if (i % columnCount == 0) {
+                    diagram += "\n";
+                }
+                diagram += table[i] == null ? ".." :
+                    table[i].shape.toString() + table[i].color.toString();
+            }
+            return diagram;
         }
 
         internal function update():int

@@ -118,11 +118,11 @@ package com.finegamedesign.facetnated
             }
             if (inTrial) {
                 var win:int = model.update();
-                //+ view.update(model);
+                view.update();
                 result(win);
             }
             else {
-                //+ view.update(model);
+                view.update();
                 if ("next" == feedback.currentLabel) {
                     next();
                 }

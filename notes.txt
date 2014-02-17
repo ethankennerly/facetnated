@@ -1,14 +1,10 @@
 TODO
-	Drag to match 3 or more gems of same color.
-	Drag to match 3 or more gems of same shape.
 	Slide gems above empty cells down.
 	Slide columns right of empty columns left.
 	Recognize no moves left.
 	Score number of gems removed.
 	10 levels.
 	Time limit.
-DONE
-	See a 7x5 grid of shuffled 5 shapes and 5 colors.
 
 
 Dimensions
