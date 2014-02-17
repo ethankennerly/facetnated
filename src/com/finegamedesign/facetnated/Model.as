@@ -5,7 +5,15 @@ package com.finegamedesign.facetnated
         internal static const EMPTY:int = -1;
 
         internal static var levels:Array = [
+            {colorCount: 2, shapeCount: 2, columnCount: 4, rowCount: 3},
+            {colorCount: 3, shapeCount: 2, columnCount: 5, rowCount: 3},
+            {colorCount: 2, shapeCount: 3, columnCount: 5, rowCount: 3},
             {colorCount: 3, shapeCount: 3, columnCount: 5, rowCount: 3},
+            {colorCount: 3, shapeCount: 3, columnCount: 6, rowCount: 4},
+            {colorCount: 4, shapeCount: 3, columnCount: 6, rowCount: 4},
+            {colorCount: 4, shapeCount: 4, columnCount: 6, rowCount: 4},
+            {colorCount: 4, shapeCount: 4, columnCount: 6, rowCount: 4},
+            {colorCount: 4, shapeCount: 4, columnCount: 7, rowCount: 5},
             {colorCount: 5, shapeCount: 5, columnCount: 7, rowCount: 5}
         ];
 
@@ -22,9 +30,13 @@ package com.finegamedesign.facetnated
         internal var selected:Array;
         internal var selectShape:Boolean;
         internal var table:Array;
+        internal var highScore:int;
+        internal var score:int;
 
         public function Model()
         {
+            score = 0;
+            highScore = 0;
         }
 
         internal function populate(levelParams:Object):void
@@ -149,11 +161,29 @@ package com.finegamedesign.facetnated
                     table[address] = null;
                 }
                 collapse(table);
+                scoreUp(removed.length, selectColor, selectShape);
             }
             selected = [];
             return removed;
         }
-    
+   
+        /**
+         * 10, 20, 40,  80, 160, 320, 640, 1280, 2560, 5120, ...
+         */
+        private function scoreUp(length:int, selectColor:Boolean, selectShape:Boolean):void
+        {
+            kill += length;
+            if (!selectColor && selectShape) {
+                length += 2;
+            }
+            var points:int = Math.pow(2, length);
+            points *= 10;
+            score += points;
+            if (highScore < score) {
+                highScore = score;
+            }
+        }
+
         /**
          * Swap some cells and their indexes in table.
          */

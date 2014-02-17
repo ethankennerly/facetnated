@@ -1,9 +1,8 @@
 TODO
-	Slide gems above empty cells down.
-	Slide columns right of empty columns left.
+	Score 10 levels.  If clear board, level up.
+	Restart level.
 	Recognize no moves left.
 	Score number of gems removed.
-	10 levels.
 	Time limit.
 
 

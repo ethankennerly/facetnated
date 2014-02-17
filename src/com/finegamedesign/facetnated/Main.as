@@ -38,13 +38,11 @@ package com.finegamedesign.facetnated
         public var score_txt:TextField;
 
         private var elapsed:Number;
-        private var highScore:int;
         private var inTrial:Boolean;
         private var level:int;
         private var maxLevel:int;
         private var model:Model;
         private var previousTime:int;
-        private var score:int;
         private var view:View;
 
         public function Main()
@@ -60,8 +58,6 @@ package com.finegamedesign.facetnated
         public function init(event:Event=null):void
         {
             inTrial = false;
-            score = 0;
-            highScore = 0;
             level = 1;
             maxLevel = Model.levels.length;
             previousTime = getTimer();
@@ -96,8 +92,8 @@ package com.finegamedesign.facetnated
         private function updateHudText():void
         {
             // trace("updateHudText: ", score, highScore);
-            score_txt.text = score.toString();
-            highScore_txt.text = highScore.toString();
+            score_txt.text = model.score.toString();
+            highScore_txt.text = model.highScore.toString();
             level_txt.text = level.toString();
             maxLevel_txt.text = maxLevel.toString();
             kill_txt.text = model.kill.toString();
@@ -146,7 +142,6 @@ package com.finegamedesign.facetnated
         private function win():void
         {
             inTrial = false;
-            scoreUp();
             level++;
             if (Model.levels.length < level) {
                 level = 0;
@@ -157,14 +152,13 @@ package com.finegamedesign.facetnated
                 feedback.gotoAndPlay("correct");
                 correct.play();
             }
-            FlxKongregate.api.stats.submit("Score", score);
+            FlxKongregate.api.stats.submit("Score", model.score);
         }
 
         private function lose():void
         {
-            scoreUp();
             inTrial = false;
-            FlxKongregate.api.stats.submit("Score", score);
+            FlxKongregate.api.stats.submit("Score", model.score);
             mouseChildren = false;
             feedback.gotoAndPlay("wrong");
             wrong.play();
@@ -186,17 +180,8 @@ package com.finegamedesign.facetnated
             }
         }
 
-        private function scoreUp():void
-        {
-            score += model.kill;
-            if (highScore < score) {
-                highScore = score;
-            }
-        }
-
         public function restart():void
         {
-            score = 0;
             level = 1;
             trial(level);
             mouseChildren = true;
