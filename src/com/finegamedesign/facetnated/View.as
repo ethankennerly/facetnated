@@ -73,6 +73,7 @@ package com.finegamedesign.facetnated
                 cell.addEventListener(MouseEvent.MOUSE_DOWN, selectDown, false, 0, true);
                 cell.addEventListener(MouseEvent.ROLL_OVER, select, false, 0, true);
                 cell.model = model.table[i];
+                cell.buttonMode = true;
                 room.addChild(cell);
                 table.push(cell);
             }
@@ -133,7 +134,7 @@ package com.finegamedesign.facetnated
             }
             var mc:MovieClip = MovieClip(e.currentTarget);
             var index:int = mc.model.index;
-            trace("View.select: index " + index);
+            // trace("View.select: index " + index);
             var selected:Boolean = model.select(index);
             updateCells(model, table);
         }

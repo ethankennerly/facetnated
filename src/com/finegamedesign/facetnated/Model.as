@@ -167,7 +167,7 @@ package com.finegamedesign.facetnated
             var removed:Array = [];
             if (selectedMin <= selected.length) {
                 removed = selected.slice();
-                trace("Model.judge: removed " + removed);
+                // trace("Model.judge: removed " + removed);
                 for each(var address:int in removed) {
                     table[address].index = EMPTY;
                     table[address] = null;
@@ -236,7 +236,7 @@ package com.finegamedesign.facetnated
          */
         private function collapseLeft(table:Array):void
         {
-            trace("Model.collapseLeft: before " + diagram(table));
+            // trace("Model.collapseLeft: before " + diagram(table));
             var i:int;
             var bottomLeft:int = (rowCount - 1) * columnCount;
             for (var column:int = 0; column < columnCount; column++) {
@@ -258,7 +258,7 @@ package com.finegamedesign.facetnated
                     }
                 }
             }
-            trace("Model.collapseLeft: after " + diagram(table));
+            // trace("Model.collapseLeft: after " + diagram(table));
         }
 
         internal function diagram(table:Array):String
