@@ -5,6 +5,7 @@ package com.finegamedesign.facetnated
         internal static const EMPTY:int = -1;
 
         internal static var levels:Array = [
+            {colorCount: 3, shapeCount: 3, columnCount: 5, rowCount: 3},
             {colorCount: 5, shapeCount: 5, columnCount: 7, rowCount: 5}
         ];
 
@@ -155,17 +156,19 @@ package com.finegamedesign.facetnated
     
         /**
          * Swap some cells and their indexes in table.
-         * Slide gems above empty cells down.
-	     * TODO: Slide columns right of empty columns left.
          */
         private function collapse(table:Array):void
         {
             collapseDown(table);
+            collapseLeft(table);
         }
 
+        /**
+         * Slide gems above empty cells down.
+         */
         private function collapseDown(table:Array):void
         {
-            trace("Model.collapseDown: before" + diagram(table));
+            // trace("Model.collapseDown: before " + diagram(table));
             for (var i:int = cellCount - 1; columnCount <= i; i--) {
                 if (null == table[i]) {
                     var above:int = i - columnCount;
@@ -180,7 +183,37 @@ package com.finegamedesign.facetnated
                     }
                 }
             }
-            trace("Model.collapseDown: after" + diagram(table));
+            // trace("Model.collapseDown: after " + diagram(table));
+        }
+
+        /**
+	     * Slide columns right of empty columns left.
+         */
+        private function collapseLeft(table:Array):void
+        {
+            trace("Model.collapseLeft: before " + diagram(table));
+            var i:int;
+            var bottomLeft:int = (rowCount - 1) * columnCount;
+            for (var column:int = 0; column < columnCount; column++) {
+                i = bottomLeft + column;
+                if (null == table[i]) {
+                    var right:int = i + 1;
+                    if (null != table[right]) {
+                        for (var j:int = i; bottomLeft <= j && table[j] == null; 
+                                j--) {
+                        }
+                        j++;
+                        for (; 0 <= j; j -= columnCount, right -= columnCount) {
+                            if (null != table[right]) {
+                                table[j] = table[right];
+                                table[j].index = j;
+                                table[right] = null;
+                            }
+                        }
+                    }
+                }
+            }
+            trace("Model.collapseLeft: after " + diagram(table));
         }
 
         internal function diagram(table:Array):String
