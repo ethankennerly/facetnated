@@ -126,26 +126,13 @@ package com.finegamedesign.facetnated
             select(e);
         }
 
-        /*-
-        private function indexAt(model:Model, mc:MovieClip):int
-        {
-            var column:int = columnAt(
-                room.scaleX * mc.x, 
-                model.columnCount);
-            var row:int = rowAt(
-                room.scaleY * mc.y, 
-                model.rowCount);
-            return model.indexAt(column, row);
-        }
-        -*/
-
         private function select(e:MouseEvent):void
         {
             if (!isMouseDown) {
                 return;
             }
             var mc:MovieClip = MovieClip(e.currentTarget);
-            var index:int = mc.model.index;  // indexAt(model, mc);
+            var index:int = mc.model.index;
             trace("View.select: index " + index);
             var selected:Boolean = model.select(index);
             updateCells(model, table);
@@ -165,7 +152,7 @@ package com.finegamedesign.facetnated
                     index = Model.EMPTY;
                 }
                 else {
-                    index = mc.model.index;  // indexAt(model, mc);
+                    index = mc.model.index;
                 }
                 if (0 <= model.selected.indexOf(index)) {
                     mc.alpha = 0.25;
@@ -190,35 +177,21 @@ package com.finegamedesign.facetnated
         private function judge(e:MouseEvent):void
         {
             mouseUp(e);
-            //- remove(model.judge(), model.columnCount, model.rowCount);
             model.judge();
             updateCells(model, table);
         }
 
-        /**
-         * Remove cells corresponding to model's addresses.
-         */
-        private function remove(addresses:Array, columnCount:int, rowCount:int):void
+        internal function clear():void
         {
-            /*-
-            for each(var address:int in addresses) {
-                var x:Number = positionX(address, columnCount);
-                var y:Number = positionY(address, columnCount, rowCount);
-                for (var c:int = table.length - 1; 0 <= c; c--) {
-                    var cell:MovieClip = table[c];
-                    if (near(cell.x, x) && near(cell.y, y)) {
-                        room.removeChild(cell);
-                        table.splice(c, 1);
-                    }
+            model.clear();
+            updateCells(model, table);
+            for (var t:int = 0; t < table.length; t++) {
+                var mc:MovieClip = table[t];
+                if (room.contains(mc)) {
+                    room.removeChild(mc);
                 }
+                table.splice(t, 1);
             }
-            -*/
-        }
-
-        private function near(x0:Number, x1:Number):Boolean
-        {
-            var tolerance:Number = 10.0;
-            return (Math.abs(x1 - x0) <= tolerance);
         }
     }
 }

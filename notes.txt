@@ -1,9 +1,6 @@
 TODO
-	Score 10 levels.  If clear board, level up.
-	Restart level.
 	Recognize no moves left.
-	Score number of gems removed.
-	Time limit.
+	Time limit or bonus.
 
 
 Dimensions

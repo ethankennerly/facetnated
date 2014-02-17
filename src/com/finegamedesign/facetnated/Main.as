@@ -36,6 +36,7 @@ package com.finegamedesign.facetnated
         public var maxKill_txt:TextField;
         public var room:MovieClip;
         public var score_txt:TextField;
+        public var restartTrial_btn:SimpleButton;
 
         private var elapsed:Number;
         private var inTrial:Boolean;
@@ -64,11 +65,13 @@ package com.finegamedesign.facetnated
             elapsed = 0;
             model = new Model();
             model.onContagion = contagion.play;
-            model.onDie = die.play;
+            model.onDie = correct.play;
+            model.onDeselect = wrong.play;
             view = new View();
             trial(level);
             addEventListener(Event.ENTER_FRAME, update, false, 0, true);
             level_txt.addEventListener(MouseEvent.CLICK, cheatLevel, false, 0, true);
+            restartTrial_btn.addEventListener(MouseEvent.CLICK, restartTrial, false, 0, true);
         }
 
         private function cheatLevel(event:MouseEvent):void
@@ -77,6 +80,12 @@ package com.finegamedesign.facetnated
             if (maxLevel < level) {
                 level = 1;
             }
+        }
+
+        private function restartTrial(e:MouseEvent):void
+        {
+            view.clear();
+            lose();
         }
 
         public function trial(level:int):void
@@ -162,7 +171,6 @@ package com.finegamedesign.facetnated
             mouseChildren = false;
             feedback.gotoAndPlay("wrong");
             wrong.play();
-            level = 0;
         }
 
         public function next():void

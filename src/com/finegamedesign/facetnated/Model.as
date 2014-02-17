@@ -14,7 +14,9 @@ package com.finegamedesign.facetnated
             {colorCount: 4, shapeCount: 4, columnCount: 6, rowCount: 4},
             {colorCount: 4, shapeCount: 4, columnCount: 6, rowCount: 4},
             {colorCount: 4, shapeCount: 4, columnCount: 7, rowCount: 5},
-            {colorCount: 5, shapeCount: 5, columnCount: 7, rowCount: 5}
+            {colorCount: 5, shapeCount: 5, columnCount: 7, rowCount: 5},
+            {colorCount: 5, shapeCount: 5, columnCount: 8, rowCount: 6},
+            {colorCount: 5, shapeCount: 5, columnCount: 9, rowCount: 7}
         ];
 
         internal var kill:int;
@@ -23,6 +25,7 @@ package com.finegamedesign.facetnated
         internal var colorCount:int;
         internal var columnCount:int;
         internal var onContagion:Function;
+        internal var onDeselect:Function;
         internal var onDie:Function;
         internal var rowCount:int;
         internal var shapeCount:int;
@@ -32,11 +35,13 @@ package com.finegamedesign.facetnated
         internal var table:Array;
         internal var highScore:int;
         internal var score:int;
+        internal var restartScore:int;
 
         public function Model()
         {
             score = 0;
             highScore = 0;
+            restartScore = 0;
         }
 
         internal function populate(levelParams:Object):void
@@ -60,6 +65,7 @@ package com.finegamedesign.facetnated
             }
             selected = [];
             kill = 0;
+            restartScore = score;
             maxKill = columnCount * rowCount;
         }
 
@@ -121,10 +127,16 @@ package com.finegamedesign.facetnated
                 var index:int = selected.indexOf(i);
                 if (index <= -1) {
                     selected.push(i);
+                    if (null != onContagion) {
+                        onContagion();
+                    }
                 }
                 else {
                     selected.splice(index, 999);
                     push = false;
+                    if (null != onDeselect) {
+                        onDeselect();
+                    }
                 }
             }
             return push;
@@ -162,6 +174,9 @@ package com.finegamedesign.facetnated
                 }
                 collapse(table);
                 scoreUp(removed.length, selectColor, selectShape);
+                if (null != onDie) {
+                    onDie();
+                }
             }
             selected = [];
             return removed;
@@ -257,6 +272,21 @@ package com.finegamedesign.facetnated
                     table[i].shape.toString() + table[i].color.toString();
             }
             return diagram;
+        }
+
+        /**
+         * Remove all cells.
+         * Rollback score.
+         */
+        internal function clear():void
+        {
+            for (var i:int = 0; i < table.length; i++) {
+                if (null != table[i]) {
+                    table[i].index = EMPTY;
+                }
+                table[i] = null;
+            }
+            score = restartScore;
         }
 
         internal function update():int
