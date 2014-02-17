@@ -2,6 +2,8 @@ package com.finegamedesign.facetnated
 {
     public class Model
     {
+        internal static const EMPTY:int = -1;
+
         internal static var levels:Array = [
             {colorCount: 5, shapeCount: 5, columnCount: 7, rowCount: 5}
         ];
@@ -15,6 +17,9 @@ package com.finegamedesign.facetnated
         internal var onDie:Function;
         internal var rowCount:int;
         internal var shapeCount:int;
+        internal var selectColor:Boolean;
+        internal var selected:Array;
+        internal var selectShape:Boolean;
         internal var table:Array;
 
         public function Model()
@@ -35,6 +40,7 @@ package com.finegamedesign.facetnated
                 table.push(cell);
             }
             shuffle(table);
+            selected = [];
             kill = 0;
             maxKill = columnCount * rowCount;
             trace("Model.populate: " + table.toString());
@@ -58,6 +64,96 @@ package com.finegamedesign.facetnated
                 array[i] = array[j];
                 array[j] = tmp;
             }
+        }
+
+        internal function indexAt(column:int, row:int):int
+        {
+            return row * columnCount + column;
+        }
+
+        /**
+         * Nothing selected yet.
+         * Just mouse down.  Select that cell's address.  Selected is translucent.
+         * Just mouse over and down adjacent to last selected address.  If matches properties of selection, then select that address.
+         * Just mouse over and down not adjacent.  Do nothing.
+         * Mouse up.  Judge selection of cell addresses.  Clear selection.  Delete the cells.
+         */
+        internal function select(i:int):Boolean
+        {
+            var push:Boolean = false;
+            if (selected.length == 0) {
+                push = true;
+                selectColor = true;
+                selectShape = true;
+            }
+            else {
+                var tail:int = selected[selected.length - 1];
+                if (tail == i) {
+                    selected.pop();
+                }
+                else if (adjacent(tail, i)) {
+                    if (selectColor) {
+                        if (getColor(tail) == getColor(i)) {
+                            push = true;
+                            if (getShape(tail) != getShape(i)) {
+                                selectShape = false;
+                            }
+                        }
+                    }
+                    if (selectShape) {
+                        if (getShape(tail) == getShape(i)) {
+                            push = true;
+                            if (getColor(tail) != getColor(i)) {
+                                selectColor = false;
+                            }
+                        }
+                    }
+                }
+            }
+            if (push) {
+                var index:int = selected.indexOf(i);
+                if (index <= -1) {
+                    selected.push(i);
+                }
+                else {
+                    selected.splice(index, 999);
+                    push = false;
+                }
+            }
+            return push;
+        }
+
+        internal function adjacent(i:int, j:int):Boolean
+        {
+            var adjacent:Boolean = false;
+            var column0:int = i % columnCount;
+            var column1:int = j % columnCount;
+            if (Math.abs(column1 - column0) <= 1) {
+                var row0:int = i / columnCount;
+                var row1:int = j / columnCount;
+                if (Math.abs(row1 - row0) <= 1) {
+                    adjacent = true;
+                }
+            }
+            return adjacent;
+        }
+
+        /**
+         * Removed addresses if 3 or more.
+         */
+        internal function judge():Array
+        {
+            var selectedMin:int = 3;
+            var removed:Array = [];
+            if (selectedMin <= selected.length) {
+                removed = selected.slice();
+                trace("Model.judge: removed " + removed);
+                for each(var address:int in removed) {
+                    table[address] = EMPTY;
+                }
+            }
+            selected = [];
+            return removed;
         }
 
         internal function update():int

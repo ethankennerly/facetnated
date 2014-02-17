@@ -40,8 +40,6 @@ package com.finegamedesign.facetnated
         private var elapsed:Number;
         private var highScore:int;
         private var inTrial:Boolean;
-        private var isMouseDown:Boolean;
-        private var mouseJustPressed:Boolean;
         private var level:int;
         private var maxLevel:int;
         private var model:Model;
@@ -68,32 +66,13 @@ package com.finegamedesign.facetnated
             maxLevel = Model.levels.length;
             previousTime = getTimer();
             elapsed = 0;
-            mouseJustPressed = false;
-            isMouseDown = false;
             model = new Model();
             model.onContagion = contagion.play;
             model.onDie = die.play;
             view = new View();
             trial(level);
             addEventListener(Event.ENTER_FRAME, update, false, 0, true);
-            addEventListener(MouseEvent.MOUSE_DOWN, mouseDown, false, 0, true);
-            addEventListener(MouseEvent.MOUSE_UP, mouseUp, false, 0, true);
             level_txt.addEventListener(MouseEvent.CLICK, cheatLevel, false, 0, true);
-        }
-
-        private function mouseDown(event:MouseEvent):void
-        {
-            mouseJustPressed = !isMouseDown;
-            if (mouseJustPressed) {
-                trace("Main.mouseDown: mouseJustPressed: TODO");
-            }
-            isMouseDown = true;
-        }
-
-        private function mouseUp(event:MouseEvent):void
-        {
-            mouseJustPressed = false;
-            isMouseDown = false;
         }
 
         private function cheatLevel(event:MouseEvent):void
